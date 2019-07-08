@@ -20,30 +20,71 @@
 
           <v-card-text>
             <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.name" label="Nombre"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.lastname" label="Apellido"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.username" label="Usuario"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md6>
-                  <v-text-field v-model="editedItem.password" label="Password"></v-text-field>
-                </v-flex>
-              </v-layout>
+              <form>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field 
+                      v-model="editedItem.name" 
+                      label="Nombre"
+                      
+                      v-validate="'required|max:15'"
+                      :counter="15"
+                      :error-messages="errors.collect('name')"
+                      data-vv-name="name"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field 
+                      v-model="editedItem.lastname" 
+                      label="Apellido"
+
+                      v-validate="'required'"
+                      :error-messages="errors.collect('lastname')"
+                      data-vv-name="lastname"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field 
+                      v-model="editedItem.username" 
+                      label="Usuario"
+
+                      v-validate="'required'"
+                      :error-messages="errors.collect('username')"
+                      data-vv-name="username"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field 
+                      v-model="editedItem.email" 
+                      label="Email"
+                      v-validate="'email'"
+                      :error-messages="errors.collect('email')"
+                      data-vv-name="email"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field 
+                      v-model="editedItem.password" 
+                      label="Password"
+
+                      v-validate="'required'"
+                      :error-messages="errors.collect('password')"
+                      data-vv-name="password"
+                      required
+                    ></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </form>
             </v-container>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" flat @click="close">Cancelar</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Guardar</v-btn>
+            <v-btn color="blue darken-1" flat @click="submit">Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -57,7 +98,7 @@
       >
       <template v-slot:items="props">
         <td>{{ props.item.id }}</td>
-        <td>{{ props.item.name }}</td>
+        <td><v-list-tile :to="{ name: 'view', params: { id: props.item.id} }" >{{ props.item.name }}</v-list-tile></td>
         <td>{{ props.item.lastname }}</td>
         <td>{{ props.item.username }}</td>
         <td>{{ props.item.email }}</td>
@@ -91,7 +132,16 @@
   import { mapState, mapMutations } from 'vuex'
   import axios from 'axios'
   import toastr from 'toastr'
+  import Vue from 'vue'
+  import VeeValidate, { Validator, required, email, minLength, sameAs } from 'vee-validate'
+  import es from 'vee-validate/dist/locale/es';
+
+  Vue.use(VeeValidate)
+  Validator.localize('es', es);
   export default {
+    $_veeValidate: {
+      validator: 'new'
+    },
     data: () => ({
       dialog: false,
       search: '',
@@ -131,6 +181,24 @@
         username: '',
         email: '',
         password: ''
+      },
+      dictionary: {
+          attributes: {
+          name: 'Nombre',
+          email: 'Correo'
+          // custom attributes
+          },
+          custom: {
+          name: {
+              // required: () => 'Name can not be empty 4444',
+              // required: () => 'El campo nombre no puede ser vacio',
+              max: 'The name field may not be greater than 12 characters 2222'
+              // custom messages
+          },
+          select: {
+              required: 'Select field is required 1111'
+          }
+          }
       }
     }),
 
@@ -159,6 +227,16 @@
 
     methods: {
       ...mapMutations(['mostrarLoading', 'ocultarLoading']),
+
+      async submit () {
+          // this.$validator.validateAll().then((isValid) => {
+          // })
+          let isValid = await this.$validator.validateAll()
+          if (isValid) {
+            this.save();
+          } 
+      },
+
       initialize () {
         this.fillDataTable()
       },
@@ -239,7 +317,7 @@
       },
 
       async fillDataTable(){
-        this.mostrarLoading({titulo: 'Cargando usuarios', color: 'warning'})
+        this.mostrarLoading({titulo: 'Cargando usuarios', color: 'primary'})
         try {
           let data = await axios.get(`${process.env.VUE_APP_API_WEB}/users`)
           this.desserts = await data.data;
@@ -249,6 +327,10 @@
           this.ocultarLoading()
         }
       }
-    }
+    },
+
+    mounted () {
+      this.$validator.localize('es', this.dictionary)
+    },
   }
 </script>

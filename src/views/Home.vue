@@ -1,17 +1,24 @@
 <template>
   <div class="home">
+    <v-btn to="/login" color="success">Success</v-btn>
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { Component, Vue } from 'vue-property-decorator';
 import HelloWorld from '../components/HelloWorld.vue'; // @ is an alias to /src
+import { mapMutations } from 'vuex'
 
-@Component({
+export default {
   components: {
-    HelloWorld,
+    HelloWorld
   },
-})
-export default class Home extends Vue {}
+  methods: {
+    ...mapMutations(['mostrarLoading', 'ocultarLoading', 'setLayout']),
+  },
+  created () {
+      this.setLayout('principal-layout')
+  }
+}
 </script>

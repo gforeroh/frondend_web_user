@@ -10,12 +10,14 @@
     >
       <v-card-text>
         <v-btn
-          v-for="icon in icons"
-          :key="icon"
+          v-for="social in socials"
+          :key="social.icon"
           class="mx-3 white--text"
+          :href="social.url"
+          target="_blank"
           icon
         >
-          <v-icon size="24px">{{ icon }}</v-icon>
+          <v-icon size="24px">{{ social.icon }}</v-icon>
         </v-btn>
       </v-card-text>
 
@@ -34,12 +36,27 @@
 <script>
   export default {
     data: () => ({
-      icons: [
-        'fab fa-facebook',
-        'fab fa-twitter',
-        'fab fa-google-plus',
-        'fab fa-linkedin',
-        'fab fa-instagram'
+      socials: [
+        {
+          icon: 'fab fa-facebook',
+          url: 'https://web.facebook.com/lalo.forero'
+        },
+        {
+          icon: 'fab fa-twitter',
+          url: 'https://twitter.com/LaloForero'
+        },
+        {
+          icon: 'fab fa-google-plus',
+          url: '/'
+        },
+        {
+          icon: 'fab fa-linkedin',
+          url: 'https://www.linkedin.com/in/gerardo-forero-635017142/'
+        },
+        {
+          icon: 'fab fa-instagram',
+          url: 'https://www.instagram.com/laloforever'
+        }
       ]
     })
   }

@@ -5,11 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    layout: 'login-layout',
     loading: {
       titulo: '',
       color: 'primary',
       estado: false
-    }
+    },
   },
   mutations: {
     mostrarLoading(state, payload){
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     ocultarLoading(state){
       state.loading.estado = false
+    },
+    setLayout(state, newLayout) {
+      state.layout = newLayout
     }
   },
   actions: {

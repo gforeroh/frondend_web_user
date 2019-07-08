@@ -4,15 +4,15 @@
 
     <v-toolbar-title class="white--text">Title</v-toolbar-title>
 
-    <v-spacer></v-spacer>
-    <v-toolbar-items class="hidden-sm-and-down">
+    <v-spacer class="hidden-sm-and-down"></v-spacer>
+    <v-toolbar-items>
       <v-btn flat to="/">Home</v-btn>
       <v-btn flat to="/about">About</v-btn>
       <v-btn flat to="/users">Usuarios</v-btn>
-      <v-btn flat to="/users/view">Vista usuario</v-btn>
+      <v-btn flat to="/formulario">Formulario</v-btn>
     </v-toolbar-items>
 
-    <v-spacer></v-spacer>
+    <v-spacer class="hidden-sm-and-down"></v-spacer>
 
     <v-btn icon>
       <v-icon>search</v-icon>
