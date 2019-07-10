@@ -30,10 +30,11 @@ export default {
         }
     },
     created () {
+        this.setLayout('principal-layout')
         let nose = this.$route.params 
     },
     methods: {
-        ...mapMutations(['mostrarLoading', 'ocultarLoading']),
+        ...mapMutations(['mostrarLoading', 'ocultarLoading', 'setLayout']),
     }
 }
 </script>

@@ -66,10 +66,16 @@
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md6>
-                    <v-text-field 
-                      v-model="editedItem.password" 
+                    <v-text-field
+                      v-model="editedItem.password"
                       label="Password"
-
+                      :append-icon="show1 ? 'visibility' : 'visibility_off'"
+                      :rules="[rules.required, rules.min]"
+                      :type="show1 ? 'text' : 'password'"
+                      name="input-10-1"
+                      hint="At least 8 characters"
+                      counter
+                      @click:append="show1 = !show1"
                       v-validate="'required'"
                       :error-messages="errors.collect('password')"
                       data-vv-name="password"
@@ -102,7 +108,6 @@
         <td>{{ props.item.lastname }}</td>
         <td>{{ props.item.username }}</td>
         <td>{{ props.item.email }}</td>
-        <td>{{ props.item.password }}</td>
         <td class="justify-center layout px-0">
           <v-icon
             small
@@ -158,7 +163,6 @@
         { text: 'Apellidos', value: 'lastname' },
         { text: 'Usuario', value: 'username' },
         { text: 'Email', value: 'email' },
-        { text: 'Password', value: 'password', sortable: false },
         {
           text: 'Acciones',
           align: 'center',
@@ -199,6 +203,13 @@
               required: 'Select field is required 1111'
           }
           }
+      },
+      show1: false,
+      password: 'Password',
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+        emailMatch: () => ('The email and password you entered don\'t match')
       }
     }),
 

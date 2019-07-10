@@ -19,6 +19,7 @@ import axios from 'axios'
 import Vue from 'vue'
 import router from '@/router'
 import VueRouterBackButton from 'vue-router-back-button'
+import { mapMutations } from 'vuex'
 Vue.use(VueRouterBackButton, {
   router,
   ignoreRoutesWithSameName: true,
@@ -35,9 +36,11 @@ export default {
     }
   },
   created () {
+    this.setLayout('principal-layout')
     this.getUser()    
   },
   methods: {
+    ...mapMutations(['mostrarLoading', 'ocultarLoading', 'setLayout']),
     async getUser(){
       try {
         let id = this.$route.params.id
